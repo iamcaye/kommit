@@ -19,9 +19,5 @@ func GetStagedDiff(dir string) (string, error) {
 		return "", fmt.Errorf("%s", strings.TrimSpace(stderr.String()))
 	}
 
-	diff := strings.TrimSpace(stdout.String())
-	if diff == "" {
-		return "", fmt.Errorf("nothing staged — run `git add` first")
-	}
-	return diff, nil
+	return strings.TrimSpace(stdout.String()), nil
 }
