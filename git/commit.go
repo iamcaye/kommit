@@ -1,11 +1,9 @@
 package git
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 // Commit writes message to a temp file and runs `git commit -F <tmpfile>` from dir.
@@ -24,12 +22,11 @@ func Commit(dir, message string) error {
 
 	cmd := exec.Command("git", "commit", "-F", f.Name())
 	cmd.Dir = dir
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
 	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%s", strings.TrimSpace(stderr.String()))
+		return fmt.Errorf("git commit failed")
 	}
 	return nil
 }
