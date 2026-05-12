@@ -1,0 +1,4 @@
+fix: correct off-by-one in pagination
+
+fix(pagination): correct off-by-one error in page count
+The page count was calculated before slicing.

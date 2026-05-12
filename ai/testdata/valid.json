@@ -1,0 +1,4 @@
+[
+  {"subject": "fix: correct off-by-one in pagination", "body": ""},
+  {"subject": "fix(pagination): correct off-by-one error in page count", "body": "The page count was calculated before slicing, causing the last\npage to appear empty when results were an exact multiple of page size."}
+]
