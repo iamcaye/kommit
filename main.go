@@ -61,6 +61,20 @@ func main() {
 		if msg.Body != "" {
 			message += "\n\n" + msg.Body
 		}
+		fmt.Fprintln(os.Stderr, message)
+		fmt.Fprint(os.Stderr, "\npress Enter to commit, any other key to abort...")
+		b := make([]byte, 1)
+		fd := int(os.Stdin.Fd())
+		if old, err := term.MakeRaw(fd); err == nil {
+			os.Stdin.Read(b)
+			term.Restore(fd, old)
+		} else {
+			os.Stdin.Read(b)
+		}
+		fmt.Fprintln(os.Stderr)
+		if b[0] != '\r' && b[0] != '\n' {
+			os.Exit(0)
+		}
 	} else {
 		var err error
 		message, err = picker.Pick(msgs)
