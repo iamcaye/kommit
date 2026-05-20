@@ -63,9 +63,9 @@ func invoke(backend Backend, prompt string) (string, error) {
 	var cmd *exec.Cmd
 	switch backend {
 	case BackendClaude:
-		cmd = exec.CommandContext(ctx, "claude", "--print")
+		cmd = exec.CommandContext(ctx, "claude", "--model", "claude-haiku-4-5-20251001", "--print")
 	case BackendCodex:
-		cmd = exec.CommandContext(ctx, "codex", "-q")
+		cmd = exec.CommandContext(ctx, "codex", "exec", "-m", "gpt-4o-mini")
 	}
 
 	cmd.Stdin = strings.NewReader(prompt)
