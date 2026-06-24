@@ -57,15 +57,15 @@ func Generate(diff string, backend Backend) ([]CommitMessage, error) {
 }
 
 func invoke(backend Backend, prompt string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	var cmd *exec.Cmd
 	switch backend {
 	case BackendClaude:
-		cmd = exec.CommandContext(ctx, "claude", "--model", "claude-haiku-4-5-20251001", "--print")
+		cmd = exec.CommandContext(ctx, "claude", "--model", "claude-haiku-4-5-20251001", "--print", "--no-session-persistence")
 	case BackendCodex:
-		cmd = exec.CommandContext(ctx, "codex", "exec", "-m", "gpt-4o-mini")
+		cmd = exec.CommandContext(ctx, "codex", "exec", "-m", "gpt-4o-mini", "--ephemeral")
 	}
 
 	cmd.Stdin = strings.NewReader(prompt)
@@ -75,7 +75,7 @@ func invoke(backend Backend, prompt string) (string, error) {
 
 	if err := cmd.Run(); err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
-			return "", fmt.Errorf("AI timed out after 30s")
+			return "", fmt.Errorf("AI timed out after 60s")
 		}
 		return "", fmt.Errorf("AI CLI error: %s", strings.TrimSpace(stderr.String()))
 	}
